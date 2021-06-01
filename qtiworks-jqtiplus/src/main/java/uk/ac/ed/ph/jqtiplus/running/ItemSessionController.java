@@ -765,6 +765,10 @@ public final class ItemSessionController extends ItemProcessingController implem
         /* Restart the duration timer (if appropriate) */
         startItemSessionTimerIfOpen(timestamp);
     }
+    
+    public void unbindResponse(Identifier identifier) {
+    	itemSessionState.removeResponse(identifier);
+    }
 
 
     /**

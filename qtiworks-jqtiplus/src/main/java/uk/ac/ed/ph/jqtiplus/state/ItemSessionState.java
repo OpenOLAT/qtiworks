@@ -33,6 +33,17 @@
  */
 package uk.ac.ed.ph.jqtiplus.state;
 
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import uk.ac.ed.ph.jqtiplus.QtiConstants;
 import uk.ac.ed.ph.jqtiplus.internal.util.Assert;
 import uk.ac.ed.ph.jqtiplus.internal.util.DumpMode;
@@ -51,18 +62,8 @@ import uk.ac.ed.ph.jqtiplus.types.ResponseData;
 import uk.ac.ed.ph.jqtiplus.value.FloatValue;
 import uk.ac.ed.ph.jqtiplus.value.IdentifierValue;
 import uk.ac.ed.ph.jqtiplus.value.IntegerValue;
+import uk.ac.ed.ph.jqtiplus.value.NullValue;
 import uk.ac.ed.ph.jqtiplus.value.Value;
-
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Encapsulates the current state of a candidate's item session.
@@ -609,6 +610,14 @@ public final class ItemSessionState extends AbstractPartSessionState implements 
 
     public boolean hasUncommittedResponseValues() {
         return !uncommittedResponseValues.isEmpty();
+    }
+    
+    public void removeResponse(Identifier responseIdentifier) {
+    	uncommittedResponseValues.remove(responseIdentifier);
+    	rawResponseDataMap.remove(responseIdentifier);
+    	if(responseValues.containsKey(responseIdentifier)) {
+    		responseValues.put(responseIdentifier, NullValue.INSTANCE);
+    	}
     }
 
 
