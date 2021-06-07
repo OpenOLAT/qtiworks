@@ -453,7 +453,7 @@ public final class ExtendedTextInteraction extends BlockInteraction implements S
     	boolean foundStrings = false;
     	for(final SingleValue sValue:nonNullResponseStrings) {
     		if(sValue instanceof StringValue) {
-    			countWords += countWords((StringValue)sValue);
+    			countWords += countWords(((StringValue)sValue).stringValue());
     			foundStrings = true;
     		} else {
     			countWords++;
@@ -462,9 +462,15 @@ public final class ExtendedTextInteraction extends BlockInteraction implements S
     	return foundStrings ? countWords : nonNullResponseStrings.size();
     }
 
-    private int countWords(final StringValue stringValue) {
+    /**
+     * The same algorithm is used in Javascript jquery.countWords.js. It has
+     * a number of issues, like Umlaut and accent.
+     * 
+     * @param string
+     * @return
+     */
+    public static int countWords(final String string) {
     	int countWords = 0;
-    	final String string = stringValue.stringValue();
     	if(string != null && string.length() > 0) {
 	    	try(final Scanner input = new Scanner(new StringReader(string))) {
 	    		input.useDelimiter(NON_WORD_PATTERN);
