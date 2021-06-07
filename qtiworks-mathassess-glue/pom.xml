@@ -9,12 +9,12 @@ All Rights Reserved
   <modelVersion>4.0.0</modelVersion>
   <name>QTIWorks MathAssessTools Glue Module</name>
   <artifactId>qtiworks-mathassess-glue</artifactId>
-  <version>1.0.24</version>
+  <version>1.0.25</version>
   <packaging>jar</packaging>
   <parent>
     <groupId>org.openolat.qtiworks</groupId>
     <artifactId>qtiworks</artifactId>
-    <version>1.0.24</version>
+    <version>1.0.25</version>
   </parent>
   <dependencies>
     <dependency>
