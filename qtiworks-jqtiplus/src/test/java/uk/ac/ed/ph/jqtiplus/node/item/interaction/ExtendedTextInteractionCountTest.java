@@ -19,8 +19,14 @@
  */
 package uk.ac.ed.ph.jqtiplus.node.item.interaction;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 /**
  * 
@@ -28,13 +34,33 @@ import org.junit.Test;
  * @author srosse, stephane.rosse@frentix.com, http://www.frentix.com
  *
  */
+
+@RunWith(Parameterized.class)
 public class ExtendedTextInteractionCountTest {
 	
+	@Parameters
+    public static Collection<Object[]> data() {
+        return Arrays.asList(new Object[][] {
+                { "Schöner als Umlaut", 3 },
+                { "Frühlingsgemüsebrühwürfel mag ich nicht.\nWirklich, nicht, nicht.", 7 },
+                { "\"Hello\",world;éco  , été.", 4},
+                { "été\n\rséparé.", 2 },
+                { "l'avion.", 1 }
+        });
+    }
+    
+    private String text;
+    private Integer count;
+    
+    public ExtendedTextInteractionCountTest(String text, Integer count) {
+    	this.text = text;
+    	this.count = count;
+    }
+    
+    
 	@Test
 	public void count() {
-		String val = "Drole";
-		
-		int numOfWords = ExtendedTextInteraction.countWords(val);
-		Assert.assertEquals(1, numOfWords);
+		int numOfWords = ExtendedTextInteraction.countWords(text);
+		Assert.assertEquals(count.intValue(), numOfWords);
 	}
 }

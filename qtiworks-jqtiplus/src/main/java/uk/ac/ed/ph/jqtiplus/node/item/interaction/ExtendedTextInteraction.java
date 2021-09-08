@@ -115,7 +115,7 @@ public final class ExtendedTextInteraction extends BlockInteraction implements S
 
     private static Logger logger = LoggerFactory.getLogger(ExtendedTextInteraction.class);
 
-    private static Pattern NON_WORD_PATTERN = Pattern.compile("\\W+");
+    private static Pattern NON_WORD_PATTERN = Pattern.compile("\\W+", Pattern.UNICODE_CHARACTER_CLASS);
 
     /** Name of this class in xml schema. */
     public static final String QTI_CLASS_NAME = "extendedTextInteraction";
