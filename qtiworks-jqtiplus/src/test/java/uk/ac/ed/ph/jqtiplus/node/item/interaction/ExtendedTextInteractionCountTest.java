@@ -45,7 +45,9 @@ public class ExtendedTextInteractionCountTest {
                 { "Frühlingsgemüsebrühwürfel mag ich nicht.\nWirklich, nicht, nicht.", 7 },
                 { "\"Hello\",world;éco  , été.", 4},
                 { "été\n\rséparé.", 2 },
-                { "l'avion.", 1 }
+                { "l'avion.", 1 },
+                { "<p>lorem ipsum check</p>\n<p>that et kanu unchou</p>\n<p><span class=\"math\" title=\"x%5E2\">x^2</span></p>\n<p>jump&nbsp;</p>\n<p>&nbsp;</p>", 9},
+                { "<p>lorem ipsum check</p>\n<p>that et kanu unchou</p>\n<p><span class=\"math\" title=\"x%5E2\">x^2 <span><br>dont count me must</span></span></p>\n<p>jump&nbsp;</p>\n<p>&nbsp;</p>", 9}
         });
     }
     

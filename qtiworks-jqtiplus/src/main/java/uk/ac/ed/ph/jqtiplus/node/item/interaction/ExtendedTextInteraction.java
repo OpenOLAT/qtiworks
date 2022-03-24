@@ -33,6 +33,21 @@
  */
 package uk.ac.ed.ph.jqtiplus.node.item.interaction;
 
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.regex.Pattern;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+import nu.validator.htmlparser.common.XmlViolationPolicy;
+import nu.validator.htmlparser.sax.HtmlParser;
 import uk.ac.ed.ph.jqtiplus.attribute.enumerate.TextFormatAttribute;
 import uk.ac.ed.ph.jqtiplus.attribute.value.IdentifierAttribute;
 import uk.ac.ed.ph.jqtiplus.attribute.value.IntegerAttribute;
@@ -62,15 +77,6 @@ import uk.ac.ed.ph.jqtiplus.value.SingleValue;
 import uk.ac.ed.ph.jqtiplus.value.StringValue;
 import uk.ac.ed.ph.jqtiplus.value.TextFormat;
 import uk.ac.ed.ph.jqtiplus.value.Value;
-
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.regex.Pattern;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * An extended text interaction is a blockInteraction that allows the
@@ -472,7 +478,16 @@ public final class ExtendedTextInteraction extends BlockInteraction implements S
     public static int countWords(final String string) {
     	int countWords = 0;
     	if(string != null && string.length() > 0) {
-	    	try(final Scanner input = new Scanner(new StringReader(string))) {
+    		String text;
+    		HTMLHandler handler = scan(string);
+    		if(handler == null) {
+    			text = string;
+    		} else {
+    			text = handler.getText();
+    			countWords += handler.getFormulas();
+    		}
+
+    		try(final Scanner input = new Scanner(new StringReader(text))) {
 	    		input.useDelimiter(NON_WORD_PATTERN);
 			    while (input.hasNext()) {
 			        final String word = input.next();
@@ -487,4 +502,81 @@ public final class ExtendedTextInteraction extends BlockInteraction implements S
     	}
     	return countWords;
     }
+    
+	public static HTMLHandler scan(String original) {
+		if (original == null) return null;
+		
+		try {
+			HtmlParser parser = new HtmlParser(XmlViolationPolicy.ALLOW);
+			parser.setCheckingNormalization(false);
+			HTMLHandler contentHandler = new HTMLHandler();
+			parser.setContentHandler(contentHandler);
+			parser.setErrorHandler(contentHandler);
+			parser.parseFragment(new InputSource(new StringReader(original)), "");
+			return contentHandler;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	private static class HTMLHandler extends DefaultHandler {
+		
+		private final StringBuilder builder = new StringBuilder(512);
+		private boolean collect = true;
+		private int excludeDepth = 0;
+		private int formulas = 0;
+		
+		public String getText() {
+			return builder.toString();
+		}
+		
+		public int getFormulas() {
+			return formulas;
+		}
+		
+		@Override
+		public void startElement(String uri, String localName, String qName, Attributes attributes) {
+			if(!collect) {
+				excludeDepth++;
+			} else if("MATH".equalsIgnoreCase(localName)) {
+				collect = false;
+				excludeDepth = 1;
+				formulas++;
+			} else if(attributes != null) {
+				String css = attributes.getValue("class");
+				if(css != null) {
+					String[] splited = css.split("\\s+");
+					for(String split:splited) {
+						if(split.equals("math")) {
+							collect = false;
+							excludeDepth = 1;
+							formulas++;
+							break;
+						}
+					}
+				}
+			}
+		}
+
+		@Override
+		public void characters(char[] ch, int start, int length) throws SAXException {
+			if(collect) {
+				builder.append(ch, start, length);
+			}
+		}
+
+		@Override
+		public void endElement(String uri, String localName, String qName) throws SAXException {
+			if(!collect) {
+				excludeDepth--;
+				if(excludeDepth == 0) {
+					collect = true;
+				}
+			}
+		}
+		
+		
+
+
+	}
 }

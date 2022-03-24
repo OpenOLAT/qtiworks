@@ -9,18 +9,23 @@ All Rights Reserved
   <modelVersion>4.0.0</modelVersion>
   <name>QTIWorks JQTIPlus</name>
   <artifactId>qtiworks-jqtiplus</artifactId>
-  <version>1.0.26</version>
+  <version>1.0.27</version>
   <packaging>jar</packaging>
   <parent>
     <groupId>org.openolat.qtiworks</groupId>
     <artifactId>qtiworks</artifactId>
-    <version>1.0.26</version>
+    <version>1.0.27</version>
   </parent>
   <dependencies>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
       <version>${slf4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>nu.validator</groupId>
+      <artifactId>htmlparser</artifactId>
+      <version>1.4.16</version>
     </dependency>
     <dependency>
       <groupId>net.sf.saxon</groupId>
