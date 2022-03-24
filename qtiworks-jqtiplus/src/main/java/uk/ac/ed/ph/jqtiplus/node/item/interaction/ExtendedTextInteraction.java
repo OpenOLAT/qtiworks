@@ -454,16 +454,24 @@ public final class ExtendedTextInteraction extends BlockInteraction implements S
         return true;
     }
 
-    private int countWords(final List<SingleValue> nonNullResponseStrings) {
+    public static int countWords(final List<SingleValue> nonNullResponseStrings) {
     	int countWords = 0;
     	boolean foundStrings = false;
+    	final StringBuilder sb = new StringBuilder();
     	for(final SingleValue sValue:nonNullResponseStrings) {
     		if(sValue instanceof StringValue) {
-    			countWords += countWords(((StringValue)sValue).stringValue());
+    			String s = ((StringValue)sValue).stringValue();
+    			if(s != null && s.length() > 0) {
+    				sb.append(" ").append(s);
+    			}
     			foundStrings = true;
     		} else {
     			countWords++;
     		}
+    	}
+    	
+    	if(foundStrings && sb.length() > 0) {
+    		countWords += countWords(sb.toString());
     	}
     	return foundStrings ? countWords : nonNullResponseStrings.size();
     }

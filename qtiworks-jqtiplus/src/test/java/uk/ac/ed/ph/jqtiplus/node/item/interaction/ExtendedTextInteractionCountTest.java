@@ -19,14 +19,19 @@
  */
 package uk.ac.ed.ph.jqtiplus.node.item.interaction;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+
+import uk.ac.ed.ph.jqtiplus.value.SingleValue;
+import uk.ac.ed.ph.jqtiplus.value.StringValue;
 
 /**
  * 
@@ -64,5 +69,14 @@ public class ExtendedTextInteractionCountTest {
 	public void count() {
 		int numOfWords = ExtendedTextInteraction.countWords(text);
 		Assert.assertEquals(count.intValue(), numOfWords);
+		
+		final String[] strings = text.split("\\s");
+		final List<SingleValue> nonNullResponseStrings = new ArrayList<>();
+    	for(final String s:strings) {
+    		nonNullResponseStrings.add(new StringValue(s));
+    	}
+
+		int numOfWordsInResponseStrings = ExtendedTextInteraction.countWords(nonNullResponseStrings);
+		Assert.assertEquals(count.intValue(), numOfWordsInResponseStrings);
 	}
 }
