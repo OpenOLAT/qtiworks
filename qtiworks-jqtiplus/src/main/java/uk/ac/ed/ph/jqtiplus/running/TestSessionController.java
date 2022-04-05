@@ -1572,9 +1572,11 @@ public final class TestSessionController extends TestProcessingController {
             itemSessionController.commitResponses(timestamp);
 
             /* Run response processing if everything was bound successfully */
-            if (boundSuccessfully) {
+            // OO-6119: process the response every time to prevent a discrepancy between the saved response and
+            // the score if the question is saved several times
+            //if (boundSuccessfully) {
                 itemSessionController.performResponseProcessing(timestamp);
-            }
+            //}
 
             /* Run outcome processing */
             performOutcomeProcessing();

@@ -79,8 +79,10 @@ public final class TestNonlinearIndividualTest extends SimpleProcessingTestBase 
         /* Answer item 1 invalidly */
         handleChoiceResponse("Invalid");
 
-        /* RP would not have happened in this case */
-        assertChoiceItemResponseProcessingNotRun(item1SessionState);
+        /* RP would not have happened in this case, but we want it OO-6119 */
+        // OO-6119: assertChoiceItemResponseProcessingNotRun(item1SessionState);
+        // OO-6119: assertChoiceItemResponseProcessingNotRun(item2SessionState);
+        assertChoiceItemResponseProcessingRun(item1SessionState);
         assertChoiceItemResponseProcessingNotRun(item2SessionState);
         assertOutcomeProcessingRun();
         assertChoiceItemScore(item1SessionState, 0.0);
