@@ -12,7 +12,7 @@ All Rights Reserved
   <name>QTIWorks</name>
   <groupId>org.openolat.qtiworks</groupId>
   <artifactId>qtiworks</artifactId>
-  <version>1.0.30</version>
+  <version>1.0.31</version>
   <packaging>pom</packaging>
   <modules>
     <module>qtiworks-jqtiplus</module>
@@ -26,7 +26,7 @@ All Rights Reserved
   <properties>
     <asciimath-parser.version>1.3.1</asciimath-parser.version>
     <snuggletex.version>1.3.0</snuggletex.version>
-    <jacomax.version>0.2.4</jacomax.version>
+    <jacomax.version>0.2.5</jacomax.version>
     <slf4j.version>1.7.13</slf4j.version>
     <logback.version>1.1.3</logback.version>
     <saxon9.version>9.1.0.8</saxon9.version>
@@ -127,10 +127,10 @@ All Rights Reserved
       <plugins>
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.1</version>
+          <version>3.11.0</version>
           <configuration>
-            <source>11</source>
-            <target>11</target>
+            <source>17</source>
+            <target>17</target>
             <encoding>UTF-8</encoding>
           </configuration>
         </plugin>
@@ -151,7 +151,7 @@ All Rights Reserved
         </plugin>
         <plugin>
           <artifactId>maven-war-plugin</artifactId>
-          <version>2.4</version>
+          <version>3.4.0</version>
         </plugin>
         <plugin>
           <artifactId>maven-install-plugin</artifactId>

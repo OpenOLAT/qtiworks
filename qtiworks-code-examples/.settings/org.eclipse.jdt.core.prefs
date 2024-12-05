@@ -1,9 +1,9 @@
-#Thu May 16 09:04:45 CEST 2019
-encoding/src/test/java=UTF-8
-org.eclipse.jdt.core.compiler.codegen.targetPlatform=1.8
-org.eclipse.jdt.core.compiler.source=1.8
-encoding/src/test/resources=UTF-8
+#Mon Nov 11 08:52:54 CET 2024
 eclipse.preferences.version=1
+encoding/src/test/java=UTF-8
+org.eclipse.jdt.core.compiler.codegen.targetPlatform=11
+org.eclipse.jdt.core.compiler.source=11
+encoding/src/test/resources=UTF-8
 encoding/src/main/resources=UTF-8
 encoding/src/main/java=UTF-8
-org.eclipse.jdt.core.compiler.compliance=1.8
+org.eclipse.jdt.core.compiler.compliance=11
