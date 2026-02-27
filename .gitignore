@@ -3,7 +3,7 @@
 /.settings
 */target
 *.sw?
-
+*/.classpath
 */.project
 */.settings/*
 */.settings/org.eclipse.core.resources.prefs
