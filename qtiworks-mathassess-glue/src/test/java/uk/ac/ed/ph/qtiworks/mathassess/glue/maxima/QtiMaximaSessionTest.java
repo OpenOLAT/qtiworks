@@ -36,6 +36,16 @@ package uk.ac.ed.ph.qtiworks.mathassess.glue.maxima;
 import static uk.ac.ed.ph.qtiworks.mathassess.glue.maxima.QtiMaximaProcess.MAXIMA_EQUAL_CODE;
 import static uk.ac.ed.ph.qtiworks.mathassess.glue.maxima.QtiMaximaProcess.MAXIMA_SYNTEQUAL_CODE;
 
+import java.io.IOException;
+
+import org.junit.Assert;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
+
 import uk.ac.ed.ph.qtiworks.mathassess.glue.AsciiMathHelper;
 import uk.ac.ed.ph.qtiworks.mathassess.glue.MathAssessBadCasCodeException;
 import uk.ac.ed.ph.qtiworks.mathassess.glue.MathsContentTooComplexException;
@@ -45,18 +55,8 @@ import uk.ac.ed.ph.qtiworks.mathassess.glue.types.MathsContentValueWrapper;
 import uk.ac.ed.ph.qtiworks.mathassess.glue.types.NullValueWrapper;
 import uk.ac.ed.ph.qtiworks.mathassess.glue.types.StringValueWrapper;
 import uk.ac.ed.ph.qtiworks.mathassess.glue.types.ValueWrapper;
-
 import uk.ac.ed.ph.snuggletex.utilities.MathMLUtilities;
 import uk.ac.ed.ph.snuggletex.utilities.SerializationOptions;
-
-import java.io.IOException;
-
-import org.junit.Assert;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
 
 /**
  * Basic tests for the {@link QtiMaximaProcess} class.

@@ -1,9 +1,12 @@
-#Mon Nov 11 08:52:54 CET 2024
 eclipse.preferences.version=1
-encoding/src/test/java=UTF-8
-org.eclipse.jdt.core.compiler.codegen.targetPlatform=11
-org.eclipse.jdt.core.compiler.source=11
-encoding/src/test/resources=UTF-8
-encoding/src/main/resources=UTF-8
 encoding/src/main/java=UTF-8
-org.eclipse.jdt.core.compiler.compliance=11
+encoding/src/main/resources=UTF-8
+encoding/src/test/java=UTF-8
+encoding/src/test/resources=UTF-8
+org.eclipse.jdt.core.compiler.codegen.targetPlatform=17
+org.eclipse.jdt.core.compiler.compliance=17
+org.eclipse.jdt.core.compiler.problem.enablePreviewFeatures=disabled
+org.eclipse.jdt.core.compiler.problem.forbiddenReference=warning
+org.eclipse.jdt.core.compiler.problem.reportPreviewFeatures=ignore
+org.eclipse.jdt.core.compiler.release=disabled
+org.eclipse.jdt.core.compiler.source=17
