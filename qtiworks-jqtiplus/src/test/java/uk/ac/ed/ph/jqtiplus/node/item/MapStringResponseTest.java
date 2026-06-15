@@ -79,7 +79,14 @@ public class MapStringResponseTest {
                 { "MapResponse-String.xml", new String[] { " gap " }, 1.0 },
                 { "MapResponse-String.xml", new String[] { "fill" }, 0.5 },
                 { "MapResponse-String.xml", new String[] { " fill " }, 0.5 },
-                { "MapResponse-String.xml", new String[] { "Fill" }, -1.0 }
+                { "MapResponse-String.xml", new String[] { "Fill" }, -1.0 },
+                // Custom OpenOlat feature: ignore spaces
+                { "MapResponse-String-ignore-spaces.xml", new String[] { "New York" }, 1.0 },
+                { "MapResponse-String-ignore-spaces.xml", new String[] { "NewYork" }, 1.0 },
+                { "MapResponse-String-ignore-spaces.xml", new String[] { "new york" }, -1.0 },
+                { "MapResponse-String-ignore-spaces.xml", new String[] { "1 2  3\t456\n" }, 1.0 },
+                { "MapResponse-String-ignore-spaces.xml", new String[] { "col\nor" }, 0.5 },
+                { "MapResponse-String-ignore-spaces.xml", new String[] { "Col\nOr" }, 0.5 },
         });
     }
 

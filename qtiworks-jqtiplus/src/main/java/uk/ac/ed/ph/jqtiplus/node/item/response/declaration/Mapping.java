@@ -80,6 +80,11 @@ public final class Mapping extends AbstractNode {
 
     /** Default value of the defaultValue attribute */
     public static final double ATTR_DEFAULT_VALUE_DEFAULT_VALUE = 0.0;
+    
+    /** Marker for the hidden feature: ignore spaces */
+	public static final String IGNORE_SPACES_KEY = "oo-ignore-spaces-oo";
+	
+	public static final double IGNORE_SPACES_VALUE = -32.0d;
 
     public Mapping(final ResponseDeclaration parent) {
         super(parent, QTI_CLASS_NAME);
@@ -205,8 +210,18 @@ public final class Mapping extends AbstractNode {
 
     private double mapSingleValue(final SingleValue value) {
         double result = getDefaultValue();
+        
+        boolean ignoreSpaces = false;
         for (final MapEntry entry : getMapEntries()) {
-            if (entryCompare(entry, value)) {
+        	if(entry.getMappedValue() == IGNORE_SPACES_VALUE
+        			&& entry.getMapKey() instanceof StringValue stringValue
+        			&& IGNORE_SPACES_KEY.equals(stringValue.stringValue())) {
+        		ignoreSpaces = true;
+        	}
+        }
+        
+        for (final MapEntry entry : getMapEntries()) {
+            if (entryCompare(entry, value, ignoreSpaces)) {
                 result = entry.getMappedValue();
                 break;
             }
@@ -214,7 +229,7 @@ public final class Mapping extends AbstractNode {
         return result;
     }
 
-    private boolean entryCompare(final MapEntry mapEntry, final SingleValue value) {
+    private boolean entryCompare(final MapEntry mapEntry, final SingleValue value, final boolean ignoreSpaces) {
         boolean result;
         final SingleValue mapKey = mapEntry.getMapKey();
         if (mapEntry.getCaseSensitive()) {
@@ -223,14 +238,33 @@ public final class Mapping extends AbstractNode {
         else {
             result = mapKey.toQtiString().equalsIgnoreCase(value.toQtiString());
         }
-        if(!result && mapKey instanceof StringValue && value instanceof StringValue) {
+        if(!result && mapKey instanceof StringValue mapStringKey && value instanceof StringValue valueString) {
         	if (mapEntry.getCaseSensitive()) {
-                result = StringUtilities.trim(mapKey.toQtiString()).equals(StringUtilities.trim(value.toQtiString()));
+                result = mapToQtiString(mapStringKey, ignoreSpaces).equals(mapToQtiString(valueString, ignoreSpaces));
             } else {
-                result = StringUtilities.trim(mapKey.toQtiString()).equalsIgnoreCase(StringUtilities.trim(value.toQtiString()));
+                result = mapToQtiString(mapStringKey, ignoreSpaces).equalsIgnoreCase(mapToQtiString(valueString, ignoreSpaces));
             }
         }
         return result;
+    }
+    
+    private String mapToQtiString(StringValue stringValue, boolean ignoreSpaces) {
+    	String value = stringValue.toQtiString();
+    	if(ignoreSpaces) {
+    		value = ignoreSpaces(value);
+    	}
+    	return StringUtilities.trim(value);
+    }
+    
+    private String ignoreSpaces(String value) {
+    	StringBuilder sb = new StringBuilder();
+    	for(char ch:value.toCharArray()) {
+    		switch(ch) {
+    			case ' ', '\n', '\t': continue;
+    			default: sb.append(ch);
+    		}
+    	}
+    	return sb.toString();
     }
 
     private double applyConstraints(final double value) {
