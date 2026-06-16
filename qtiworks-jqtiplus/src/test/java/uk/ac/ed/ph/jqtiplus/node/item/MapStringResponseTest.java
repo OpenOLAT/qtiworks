@@ -87,6 +87,31 @@ public class MapStringResponseTest {
                 { "MapResponse-String-ignore-spaces.xml", new String[] { "1 2  3\t456\n" }, 1.0 },
                 { "MapResponse-String-ignore-spaces.xml", new String[] { "col\nor" }, 0.5 },
                 { "MapResponse-String-ignore-spaces.xml", new String[] { "Col\nOr" }, 0.5 },
+                // Custom OpenOlat feature: wildcard
+                { "MapResponse-String-wildcard.xml", new String[] { "[CH2]([NH2])[C]([OH])=[O]" }, 8.0 },
+                { "MapResponse-String-wildcard.xml", new String[] { "[CH2][C]([OH])=[O]" }, 6.0 },
+                { "MapResponse-String-wildcard.xml", new String[] { "V[CH2][AB][C]([OH])=[O]V" }, 6.0 },
+                { "MapResponse-String-wildcard.xml", new String[] { "[CH2][AB][C][DF]([OH])=[O]" }, 5.0 },
+                // Wrong order
+                { "MapResponse-String-wildcard.xml", new String[] { "[CH2][AB]([OH])=[O][DF][C]" }, 1.0 },
+                // Start and end exact
+                { "MapResponse-String-wildcard.xml", new String[] { "V[CH2][AB][C][DF]([OH])=[O]V" }, 1.0 },
+                // MapKey for 2.0
+                { "MapResponse-String-wildcard.xml", new String[] { "X[CH2]([NH2])[C]Y" }, 2.0 },
+                // Is case sensitive
+                { "MapResponse-String-wildcard.xml", new String[] { "X[ch2]([nh2])[C]Y" }, -1.0 },
+                // MapKey for 1.0
+                { "MapResponse-String-wildcard.xml", new String[] { "foo([OH])=[O]bar" }, 1.0 },
+                { "MapResponse-String-wildcard.xml", new String[] { "([OH])=[O]" }, 1.0 },
+                { "MapResponse-String-wildcard.xml", new String[] { "nothing matches" }, -1.0 },
+                // Custom OpenOlat feature: wildcard and ignore spaces
+                { "MapResponse-String-wildcard-ignore-spaces.xml", new String[] { "Color Viridian" }, 6.0 },
+                { "MapResponse-String-wildcard-ignore-spaces.xml", new String[] { "Colour Viridien" }, 5.0 },
+                { "MapResponse-String-wildcard-ignore-spaces.xml", new String[] { "Col our   Viridien " }, 5.0 },
+                { "MapResponse-String-wildcard-ignore-spaces.xml", new String[] { "Farbe viridian" }, 2.0 },
+                { "MapResponse-String-wildcard-ignore-spaces.xml", new String[] { "Viridian, couleur" }, 2.0 },
+                { "MapResponse-String-wildcard-ignore-spaces.xml", new String[] { "Teal" }, 1.0 },
+                { "MapResponse-String-wildcard-ignore-spaces.xml", new String[] { "Blue Teal" }, 1.0 }
         });
     }
 

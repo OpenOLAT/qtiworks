@@ -28,18 +28,19 @@ frentix GmbH, https://www.frentix.com
  adaptive="false"
  identifier="MapResponse-Single"
  timeDependent="false"
- title="MapResponse (Strings)">
+ title="MapResponse (chemical with wildcard)">
     <responseDeclaration identifier="RESPONSE" cardinality="single" baseType="string">
         <mapping defaultValue="-1">
-            <mapEntry mapKey="123456" mappedValue="1.0" caseSensitive="true"/>
-            <mapEntry mapKey="NewYork" mappedValue="1.0" caseSensitive="true"/>
-            <mapEntry mapKey="color" mappedValue="0.5" caseSensitive="false"/>
-            <mapEntry mapKey="some" mappedValue="0.0"/>
+            <mapEntry mapKey="[CH2]([NH2])[C]([OH])=[O]" mappedValue="8.0" caseSensitive="true"/>
+            <mapEntry mapKey="*[CH2]*[C]([OH])=[O]*" mappedValue="6.0" caseSensitive="true"/>
+            <mapEntry mapKey="[CH2]*[C]*([OH])=[O]" mappedValue="5.0" caseSensitive="true"/>
+            <mapEntry mapKey="*[CH2]([NH2])[C]*" mappedValue="2.0" caseSensitive="true"/>
+            <mapEntry mapKey="*([OH])=[O]*" mappedValue="1.0" caseSensitive="true"/>
         </mapping>
     </responseDeclaration>
     <outcomeDeclaration identifier="OUTCOME" cardinality="single" baseType="float"/>
     <itemBody>
-    	<p><textEntryInteraction class="oo-ignore-spaces-oo" responseIdentifier="RESPONSE" ></textEntryInteraction></p>
+    	<p><textEntryInteraction class="oo-wildcard-oo" responseIdentifier="RESPONSE" ></textEntryInteraction></p>
     </itemBody>
     <responseProcessing>
         <setOutcomeValue identifier="OUTCOME">

@@ -33,11 +33,20 @@
  */
 package uk.ac.ed.ph.jqtiplus.node.item.response.declaration;
 
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import uk.ac.ed.ph.jqtiplus.attribute.value.FloatAttribute;
 import uk.ac.ed.ph.jqtiplus.group.item.response.declaration.MapEntryGroup;
 import uk.ac.ed.ph.jqtiplus.internal.util.StringUtilities;
 import uk.ac.ed.ph.jqtiplus.node.AbstractNode;
+import uk.ac.ed.ph.jqtiplus.node.QtiNode;
 import uk.ac.ed.ph.jqtiplus.node.expression.general.MapResponse;
+import uk.ac.ed.ph.jqtiplus.node.item.AssessmentItem;
+import uk.ac.ed.ph.jqtiplus.node.item.interaction.Interaction;
+import uk.ac.ed.ph.jqtiplus.types.Identifier;
 import uk.ac.ed.ph.jqtiplus.validation.ValidationContext;
 import uk.ac.ed.ph.jqtiplus.value.BaseType;
 import uk.ac.ed.ph.jqtiplus.value.Cardinality;
@@ -46,11 +55,6 @@ import uk.ac.ed.ph.jqtiplus.value.ListValue;
 import uk.ac.ed.ph.jqtiplus.value.SingleValue;
 import uk.ac.ed.ph.jqtiplus.value.StringValue;
 import uk.ac.ed.ph.jqtiplus.value.Value;
-
-import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  * A special class used to create a mapping from a source set of any baseType
@@ -83,6 +87,9 @@ public final class Mapping extends AbstractNode {
     
     /** Marker for the hidden feature: ignore spaces */
 	public static final String IGNORE_SPACES_KEY = "oo-ignore-spaces-oo";
+	
+    /** Marker for the hidden feature: wildcard */
+	public static final String WILDCARD_KEY = "oo-wildcard-oo";
 	
 	public static final double IGNORE_SPACES_VALUE = -32.0d;
 
@@ -211,25 +218,36 @@ public final class Mapping extends AbstractNode {
     private double mapSingleValue(final SingleValue value) {
         double result = getDefaultValue();
         
-        boolean ignoreSpaces = false;
+        List<String> classAttr = getInteractionClassAttr();
+        boolean ignoreSpaces = classAttr.contains(IGNORE_SPACES_KEY);
+        boolean wildcard = classAttr.contains(WILDCARD_KEY);
+
         for (final MapEntry entry : getMapEntries()) {
-        	if(entry.getMappedValue() == IGNORE_SPACES_VALUE
-        			&& entry.getMapKey() instanceof StringValue stringValue
-        			&& IGNORE_SPACES_KEY.equals(stringValue.stringValue())) {
-        		ignoreSpaces = true;
-        	}
-        }
-        
-        for (final MapEntry entry : getMapEntries()) {
-            if (entryCompare(entry, value, ignoreSpaces)) {
+            if (entryCompare(entry, value, ignoreSpaces, wildcard)) {
                 result = entry.getMappedValue();
                 break;
             }
         }
         return result;
     }
+    
+    private List<String> getInteractionClassAttr() {
+    	final ResponseDeclaration responseDeclaration = getParent();
+    	final Identifier responseIdentifier = responseDeclaration.getIdentifier();
+    	final QtiNode assessmentObject = getParent().getParent();
+        if(responseIdentifier != null && assessmentObject instanceof AssessmentItem assessmentItem) {
+        	final List<Interaction> interactions = assessmentItem.getItemBody().findInteractions();
+    		return interactions.stream()
+    				.filter(interaction -> responseIdentifier.equals(interaction.getResponseIdentifier()))
+    				.map(Interaction::getClassAttr)
+    				.findFirst()
+    				.orElse(List.of());
+        }
+        return List.of();
+    }
 
-    private boolean entryCompare(final MapEntry mapEntry, final SingleValue value, final boolean ignoreSpaces) {
+    private boolean entryCompare(final MapEntry mapEntry, final SingleValue value,
+    		final boolean ignoreSpaces, final boolean wildcard) {
         boolean result;
         final SingleValue mapKey = mapEntry.getMapKey();
         if (mapEntry.getCaseSensitive()) {
@@ -245,7 +263,49 @@ public final class Mapping extends AbstractNode {
                 result = mapToQtiString(mapStringKey, ignoreSpaces).equalsIgnoreCase(mapToQtiString(valueString, ignoreSpaces));
             }
         }
+        if(!result && wildcard && mapKey instanceof StringValue mapStringKey && value instanceof StringValue valueString
+        		&& mapStringKey.toQtiString().indexOf('*') >= 0) {
+        	String pattern = mapToQtiString(mapStringKey, ignoreSpaces);
+        	String text = mapToQtiString(valueString, ignoreSpaces);
+        	if (!mapEntry.getCaseSensitive()) {
+        		pattern = pattern.toLowerCase();
+        		text = text.toLowerCase();
+        	}
+        	result = wildcardMatch(pattern, text);
+        }
         return result;
+    }
+    
+    private boolean wildcardMatch(final String pattern, final String text) {
+    	final String[] parts = pattern.split("\\*", 255);
+    	
+    	int pos = 0;
+    	int numOfParts = parts.length;
+    	for (int i=0; i<numOfParts; i++) {
+    		final String part = parts[i];
+    		if (part.isEmpty()) {
+    			continue;
+    		}
+    		
+    		final int idx = text.indexOf(part, pos);
+    		// First block: col*or
+    		if(i == 0) {
+    			if(idx != 0) {
+    				return false;
+    			}
+    		// Last block: col*or
+    		} else if(i == numOfParts - 1) {
+    			if(idx != text.length() - part.length()) {
+    				return false;
+    			}
+    		} else if (idx < 0) {
+    			return false;
+    		}
+    		pos = idx + part.length();
+    	}
+    	
+    	
+    	return true;
     }
     
     private String mapToQtiString(StringValue stringValue, boolean ignoreSpaces) {
