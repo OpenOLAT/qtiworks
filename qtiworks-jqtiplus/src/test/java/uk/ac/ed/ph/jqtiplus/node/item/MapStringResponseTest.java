@@ -111,7 +111,9 @@ public class MapStringResponseTest {
                 { "MapResponse-String-wildcard-ignore-spaces.xml", new String[] { "Farbe viridian" }, 2.0 },
                 { "MapResponse-String-wildcard-ignore-spaces.xml", new String[] { "Viridian, couleur" }, 2.0 },
                 { "MapResponse-String-wildcard-ignore-spaces.xml", new String[] { "Teal" }, 1.0 },
-                { "MapResponse-String-wildcard-ignore-spaces.xml", new String[] { "Blue Teal" }, 1.0 }
+                { "MapResponse-String-wildcard-ignore-spaces.xml", new String[] { "Blue Teal" }, 1.0 },
+                // Make sure hottext doesn't produce NPE
+                { "MapResponse-Hottext.xml", new String[] { "Blue Teal" }, -1.0 }
         });
     }
 

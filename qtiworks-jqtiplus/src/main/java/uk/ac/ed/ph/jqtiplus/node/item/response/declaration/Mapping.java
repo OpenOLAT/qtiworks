@@ -36,6 +36,7 @@ package uk.ac.ed.ph.jqtiplus.node.item.response.declaration;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import uk.ac.ed.ph.jqtiplus.attribute.value.FloatAttribute;
@@ -240,6 +241,7 @@ public final class Mapping extends AbstractNode {
     		return interactions.stream()
     				.filter(interaction -> responseIdentifier.equals(interaction.getResponseIdentifier()))
     				.map(Interaction::getClassAttr)
+    				.filter(Objects::nonNull)
     				.findFirst()
     				.orElse(List.of());
         }
