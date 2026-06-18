@@ -248,7 +248,7 @@ public final class Mapping extends AbstractNode {
         return List.of();
     }
 
-    private boolean entryCompare(final MapEntry mapEntry, final SingleValue value,
+    public final boolean entryCompare(final MapEntry mapEntry, final SingleValue value,
     		final boolean ignoreSpaces, final boolean wildcard) {
         boolean result;
         final SingleValue mapKey = mapEntry.getMapKey();
@@ -318,7 +318,7 @@ public final class Mapping extends AbstractNode {
     	return StringUtilities.trim(value);
     }
     
-    private String ignoreSpaces(String value) {
+    private static String ignoreSpaces(String value) {
     	StringBuilder sb = new StringBuilder();
     	for(char ch:value.toCharArray()) {
     		switch(ch) {
