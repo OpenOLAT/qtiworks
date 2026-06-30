@@ -33,18 +33,14 @@
  */
 package uk.ac.ed.ph.qtiworks.test.utils;
 
-import uk.ac.ed.ph.qtiworks.mathassess.MathAssessExtensionPackage;
-import uk.ac.ed.ph.qtiworks.samples.QtiSampleAssessment;
-import uk.ac.ed.ph.qtiworks.samples.QtiSampleAssessment.Feature;
-import uk.ac.ed.ph.qtiworks.samples.QtiSampleSet;
-
-import uk.ac.ed.ph.jqtiplus.JqtiExtensionManager;
-import uk.ac.ed.ph.jqtiplus.JqtiExtensionPackage;
-import uk.ac.ed.ph.jqtiplus.xmlutils.xslt.SimpleXsltStylesheetCache;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import uk.ac.ed.ph.jqtiplus.JqtiExtensionManager;
+import uk.ac.ed.ph.jqtiplus.JqtiExtensionPackage;
+import uk.ac.ed.ph.qtiworks.samples.QtiSampleAssessment;
+import uk.ac.ed.ph.qtiworks.samples.QtiSampleSet;
 
 /**
  * Helper utilities for integration tests
@@ -63,16 +59,10 @@ public final class TestUtils {
         return result;
     }
 
-    public static MathAssessExtensionPackage buildMathAssessExtensionPackage() {
-        return new MathAssessExtensionPackage(new SimpleXsltStylesheetCache());
-    }
 
     public static JqtiExtensionManager buildJqtiExtensionManager(final QtiSampleAssessment qtiSampleAssessment) {
         /* Load extensions if required */
         final List<JqtiExtensionPackage<?>> jqtiExtensionPackages = new ArrayList<JqtiExtensionPackage<?>>();
-        if (qtiSampleAssessment.hasFeature(Feature.REQUIRES_MATHASSES)) {
-            jqtiExtensionPackages.add(buildMathAssessExtensionPackage());
-        }
         return new JqtiExtensionManager(jqtiExtensionPackages);
     }
 

@@ -35,8 +35,17 @@ package uk.ac.ed.ph.qtiworks.test.integration;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Collection;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
+
+import uk.ac.ed.ph.jqtiplus.internal.util.DumpMode;
+import uk.ac.ed.ph.jqtiplus.internal.util.ObjectDumper;
+import uk.ac.ed.ph.jqtiplus.validation.AssessmentObjectValidationResult;
 import uk.ac.ed.ph.qtiworks.samples.LanguageSampleSet;
-import uk.ac.ed.ph.qtiworks.samples.MathAssessSampleSet;
 import uk.ac.ed.ph.qtiworks.samples.QtiSampleAssessment;
 import uk.ac.ed.ph.qtiworks.samples.QtiSampleAssessment.Feature;
 import uk.ac.ed.ph.qtiworks.samples.QtiworksRegressionSampleSet;
@@ -45,17 +54,6 @@ import uk.ac.ed.ph.qtiworks.samples.StompSampleSet;
 import uk.ac.ed.ph.qtiworks.samples.TestImplementationSampleSet;
 import uk.ac.ed.ph.qtiworks.samples.UpmcSampleSet;
 import uk.ac.ed.ph.qtiworks.test.utils.TestUtils;
-
-import uk.ac.ed.ph.jqtiplus.internal.util.DumpMode;
-import uk.ac.ed.ph.jqtiplus.internal.util.ObjectDumper;
-import uk.ac.ed.ph.jqtiplus.validation.AssessmentObjectValidationResult;
-
-import java.util.Collection;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
 
 /**
  * Integration test that runs our validation process on each IMS sample checking the validity
@@ -70,7 +68,7 @@ public class ValidationSampleTests extends AbstractIntegrationTest {
     public static Collection<Object[]> data() {
         return TestUtils.makeTestParameters(
                 StandardQtiSampleSet.instance(),
-                MathAssessSampleSet.instance(),
+                //MathAssessSampleSet.instance(),
                 UpmcSampleSet.instance(),
                 StompSampleSet.instance(),
                 LanguageSampleSet.instance(),

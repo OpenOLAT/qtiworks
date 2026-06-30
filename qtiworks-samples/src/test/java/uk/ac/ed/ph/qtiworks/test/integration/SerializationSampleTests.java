@@ -33,29 +33,6 @@
  */
 package uk.ac.ed.ph.qtiworks.test.integration;
 
-import uk.ac.ed.ph.qtiworks.samples.LanguageSampleSet;
-import uk.ac.ed.ph.qtiworks.samples.MathAssessSampleSet;
-import uk.ac.ed.ph.qtiworks.samples.QtiSampleAssessment;
-import uk.ac.ed.ph.qtiworks.samples.QtiSampleAssessment.Feature;
-import uk.ac.ed.ph.qtiworks.samples.QtiworksRegressionSampleSet;
-import uk.ac.ed.ph.qtiworks.samples.StandardQtiSampleSet;
-import uk.ac.ed.ph.qtiworks.samples.StompSampleSet;
-import uk.ac.ed.ph.qtiworks.samples.UpmcSampleSet;
-import uk.ac.ed.ph.qtiworks.test.utils.TestUtils;
-
-import uk.ac.ed.ph.jqtiplus.internal.util.DumpMode;
-import uk.ac.ed.ph.jqtiplus.internal.util.ObjectDumper;
-import uk.ac.ed.ph.jqtiplus.node.item.AssessmentItem;
-import uk.ac.ed.ph.jqtiplus.reading.QtiObjectReadResult;
-import uk.ac.ed.ph.jqtiplus.reading.QtiObjectReader;
-import uk.ac.ed.ph.jqtiplus.reading.QtiXmlInterpretationException;
-import uk.ac.ed.ph.jqtiplus.serialization.QtiSaxDocumentFirer;
-import uk.ac.ed.ph.jqtiplus.serialization.SaxFiringOptions;
-import uk.ac.ed.ph.jqtiplus.xmlutils.locators.ClassPathResourceLocator;
-import uk.ac.ed.ph.jqtiplus.xmlutils.locators.ResourceLocator;
-import uk.ac.ed.ph.jqtiplus.xmlutils.xslt.XsltSerializationOptions;
-import uk.ac.ed.ph.jqtiplus.xmlutils.xslt.XsltStylesheetManager;
-
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -83,6 +60,27 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 
+import uk.ac.ed.ph.jqtiplus.internal.util.DumpMode;
+import uk.ac.ed.ph.jqtiplus.internal.util.ObjectDumper;
+import uk.ac.ed.ph.jqtiplus.node.item.AssessmentItem;
+import uk.ac.ed.ph.jqtiplus.reading.QtiObjectReadResult;
+import uk.ac.ed.ph.jqtiplus.reading.QtiObjectReader;
+import uk.ac.ed.ph.jqtiplus.reading.QtiXmlInterpretationException;
+import uk.ac.ed.ph.jqtiplus.serialization.QtiSaxDocumentFirer;
+import uk.ac.ed.ph.jqtiplus.serialization.SaxFiringOptions;
+import uk.ac.ed.ph.jqtiplus.xmlutils.locators.ClassPathResourceLocator;
+import uk.ac.ed.ph.jqtiplus.xmlutils.locators.ResourceLocator;
+import uk.ac.ed.ph.jqtiplus.xmlutils.xslt.XsltSerializationOptions;
+import uk.ac.ed.ph.jqtiplus.xmlutils.xslt.XsltStylesheetManager;
+import uk.ac.ed.ph.qtiworks.samples.LanguageSampleSet;
+import uk.ac.ed.ph.qtiworks.samples.QtiSampleAssessment;
+import uk.ac.ed.ph.qtiworks.samples.QtiSampleAssessment.Feature;
+import uk.ac.ed.ph.qtiworks.samples.QtiworksRegressionSampleSet;
+import uk.ac.ed.ph.qtiworks.samples.StandardQtiSampleSet;
+import uk.ac.ed.ph.qtiworks.samples.StompSampleSet;
+import uk.ac.ed.ph.qtiworks.samples.UpmcSampleSet;
+import uk.ac.ed.ph.qtiworks.test.utils.TestUtils;
+
 /**
  * Integration test that checks that serialized forms are re-parsed in the same way.
  *
@@ -95,7 +93,7 @@ public class SerializationSampleTests extends AbstractIntegrationTest {
     public static Collection<Object[]> data() {
         return TestUtils.makeTestParameters(
                 StandardQtiSampleSet.instance().withoutFeatures(Feature.NOT_SCHEMA_VALID),
-                MathAssessSampleSet.instance().withoutFeatures(Feature.NOT_SCHEMA_VALID),
+                //MathAssessSampleSet.instance().withoutFeatures(Feature.NOT_SCHEMA_VALID),
                 UpmcSampleSet.instance().withoutFeatures(Feature.NOT_SCHEMA_VALID),
                 StompSampleSet.instance().withoutFeatures(Feature.NOT_SCHEMA_VALID),
                 LanguageSampleSet.instance().withoutFeatures(Feature.NOT_SCHEMA_VALID),

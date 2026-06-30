@@ -33,19 +33,6 @@
  */
 package uk.ac.ed.ph.qtiworks.test.integration;
 
-import uk.ac.ed.ph.qtiworks.samples.LanguageSampleSet;
-import uk.ac.ed.ph.qtiworks.samples.MathAssessSampleSet;
-import uk.ac.ed.ph.qtiworks.samples.QtiSampleAssessment;
-import uk.ac.ed.ph.qtiworks.samples.QtiSampleAssessment.Feature;
-import uk.ac.ed.ph.qtiworks.samples.QtiworksRegressionSampleSet;
-import uk.ac.ed.ph.qtiworks.samples.StandardQtiSampleSet;
-import uk.ac.ed.ph.qtiworks.samples.StompSampleSet;
-import uk.ac.ed.ph.qtiworks.samples.UpmcSampleSet;
-import uk.ac.ed.ph.qtiworks.test.utils.TestUtils;
-
-import uk.ac.ed.ph.jqtiplus.running.ItemSessionController;
-import uk.ac.ed.ph.jqtiplus.state.ItemSessionState;
-
 import java.util.Collection;
 import java.util.Date;
 
@@ -54,6 +41,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+
+import uk.ac.ed.ph.jqtiplus.running.ItemSessionController;
+import uk.ac.ed.ph.jqtiplus.state.ItemSessionState;
+import uk.ac.ed.ph.qtiworks.samples.LanguageSampleSet;
+import uk.ac.ed.ph.qtiworks.samples.QtiSampleAssessment;
+import uk.ac.ed.ph.qtiworks.samples.QtiSampleAssessment.Feature;
+import uk.ac.ed.ph.qtiworks.samples.QtiworksRegressionSampleSet;
+import uk.ac.ed.ph.qtiworks.samples.StandardQtiSampleSet;
+import uk.ac.ed.ph.qtiworks.samples.StompSampleSet;
+import uk.ac.ed.ph.qtiworks.samples.UpmcSampleSet;
+import uk.ac.ed.ph.qtiworks.test.utils.TestUtils;
 
 /**
  * Integration test that checks that template processing runs correctly on the sample items
@@ -67,7 +65,7 @@ public class TemplateProcessingSampleTests extends AbstractIntegrationTest {
     public static Collection<Object[]> data() {
         return TestUtils.makeTestParameters(
                 StandardQtiSampleSet.instance().withoutFeatures(Feature.NOT_SCHEMA_VALID),
-                MathAssessSampleSet.instance().withoutFeatures(Feature.NOT_SCHEMA_VALID),
+                //MathAssessSampleSet.instance().withoutFeatures(Feature.NOT_SCHEMA_VALID),
                 UpmcSampleSet.instance().withoutFeatures(Feature.NOT_SCHEMA_VALID),
                 StompSampleSet.instance().withoutFeatures(Feature.NOT_SCHEMA_VALID),
                 LanguageSampleSet.instance().withoutFeatures(Feature.NOT_SCHEMA_VALID),

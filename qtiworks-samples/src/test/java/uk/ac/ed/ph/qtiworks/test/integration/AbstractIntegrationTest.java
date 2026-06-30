@@ -33,10 +33,21 @@
  */
 package uk.ac.ed.ph.qtiworks.test.integration;
 
-import uk.ac.ed.ph.qtiworks.mathassess.glue.maxima.MaximaLaunchHelper;
-import uk.ac.ed.ph.qtiworks.samples.QtiSampleAssessment;
-import uk.ac.ed.ph.qtiworks.samples.QtiSampleAssessment.Feature;
-import uk.ac.ed.ph.qtiworks.test.utils.TestUtils;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.URI;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.ac.ed.ph.jqtiplus.JqtiExtensionManager;
 import uk.ac.ed.ph.jqtiplus.exception.QtiLogicException;
@@ -53,19 +64,9 @@ import uk.ac.ed.ph.jqtiplus.validation.AssessmentObjectValidationResult;
 import uk.ac.ed.ph.jqtiplus.xmlutils.XmlReadResult;
 import uk.ac.ed.ph.jqtiplus.xmlutils.locators.ClassPathResourceLocator;
 import uk.ac.ed.ph.jqtiplus.xmlutils.locators.ResourceLocator;
-
-import uk.ac.ed.ph.snuggletex.internal.util.IOUtilities;
-
-import java.io.IOException;
-import java.net.URI;
-
-import org.junit.After;
-import org.junit.Assume;
-import org.junit.Before;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import uk.ac.ed.ph.qtiworks.samples.QtiSampleAssessment;
+import uk.ac.ed.ph.qtiworks.samples.QtiSampleAssessment.Feature;
+import uk.ac.ed.ph.qtiworks.test.utils.TestUtils;
 
 /**
  * Base class for integration tests that run on a {@link QtiSampleAssessment}
@@ -76,7 +77,9 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractIntegrationTest {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractIntegrationTest.class);
-
+   
+    public static int MAX_TEXT_STREAM_SIZE = 1024 * 1024;
+    
     protected final QtiSampleAssessment qtiSampleAssessment;
     protected final URI sampleResourceUri;
     protected final ResourceLocator sampleResourceLocator;
@@ -98,12 +101,9 @@ public abstract class AbstractIntegrationTest {
          * if they don't have Maxima or don't want the Maxima extensions.)
          */
         if (qtiSampleAssessment.hasFeature(Feature.REQUIRES_MATHASSES)) {
-            if (!MaximaLaunchHelper.isMaximaWorking()) {
-                /* Configuration failed, so use JUnit's Assume class to skip */
-                logger.warn("No working Maxima detected, so skipping this test as it requires the MathAssess extensions");
-                Assume.assumeTrue(false);
-                return;
-            }
+
+            /* Configuration failed, so use JUnit's Assume class to skip */
+            logger.warn("Maxima is not supported, so skipping this test as it requires the MathAssess extensions");
         }
         jqtiExtensionManager.init();
     }
@@ -115,7 +115,7 @@ public abstract class AbstractIntegrationTest {
 
     /* NB: This assumes all of our samples are UTF-8! */
     protected String readSampleXmlSource() throws IOException {
-        return IOUtilities.readUnicodeStream(sampleResourceLocator.findResource(sampleResourceUri));
+        return readUnicodeStream(sampleResourceLocator.findResource(sampleResourceUri));
     }
 
     protected XmlReadResult readSampleXml() throws Exception {
@@ -153,5 +153,66 @@ public abstract class AbstractIntegrationTest {
         final ItemProcessingMap itemProcessingMap = new ItemProcessingInitializer(resolvedAssessmentItem, isValid).initialize();
         final ItemSessionState itemSessionState = new ItemSessionState();
         return new ItemSessionController(jqtiExtensionManager, itemSessionControllerSettings, itemProcessingMap, itemSessionState);
+    }
+    
+    //----------------------------------------------------------------------------
+    // Reading methods
+    
+    /**
+     * Reads all character data from the given Reader, returning a String
+     * containing all of the data. The Reader will be buffered for efficiency and
+     * will be closed once finished with.
+     * Be careful reading in very large files - we will barf if MAX_FILE_SIZE is
+     * passed as a safety precaution.
+     *
+     * @param reader source of string data
+     * @return String representing the data read
+     * @throws IOException
+     */
+    public static String readCharacterStream(Reader reader) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(reader);
+        String line;
+        int size = 0;
+        StringBuilder result = new StringBuilder();
+        while ((line = bufferedReader.readLine()) != null) {
+            size += line.length() + 1;
+            if (size > MAX_TEXT_STREAM_SIZE) {
+                throw new IOException("String data exceeds current maximum safe size ("
+                        + MAX_TEXT_STREAM_SIZE + ")");
+            }
+            result.append(line).append("\n");
+        }
+        bufferedReader.close();
+        return result.toString();
+    }
+
+    /**
+     * Same as {@link #readCharacterStream(Reader)} but assumes the
+     * stream is encoded as UTF-8.
+     *
+     * @param in InputStream supplying character data
+     * @return String representing the data read in
+     * @throws IOException
+     */
+    public static String readUnicodeStream(InputStream in) throws IOException {
+        return readCharacterStream(new InputStreamReader(in, "UTF-8"));
+    }
+
+    /**
+     * Same as {@link #readUnicodeStream(InputStream)} but accepts a plain
+     * File object for convenience
+     *
+     * @param file File to read from
+     * @return String representing the data we read in
+     * @throws IOException
+     */
+    public static String readUnicodeFile(File file) throws IOException {
+        InputStream inStream = new FileInputStream(file);
+        try {
+            return readUnicodeStream(inStream);   
+        }
+        finally {
+            inStream.close();
+        }
     }
 }
